@@ -1,3 +1,0 @@
-MONGO_URI= mongodb+srv://akitoyejesutofunmi_db_user:Feranmi1234..@hospital-management-db.obftyd2.mongodb.net/?appName=hospital-management-db
-PORT= 5000
-JWT_SECRET=mysecretkey
