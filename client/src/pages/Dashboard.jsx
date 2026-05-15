@@ -1,38 +1,39 @@
-import { useEffect } from "react";
-
-import { useNavigate } from "react-router-dom";
+import DashboardLayout from "../layouts/DashboardLayout";
 
 function Dashboard() {
-  const navigate = useNavigate();
-
   const userInfo = JSON.parse(
     localStorage.getItem("userInfo")
   );
 
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/");
-    }
-  }, [navigate, userInfo]);
-
-  const logoutHandler = () => {
-    localStorage.removeItem("userInfo");
-
-    navigate("/");
-  };
-
   return (
-    <div>
-      <h1>Patient Dashboard</h1>
+    <DashboardLayout>
 
-      <h2>
+      <h1 className="text-3xl font-bold">
         Welcome {userInfo?.fullName}
-      </h2>
+      </h1>
 
-      <button onClick={logoutHandler}>
-        Logout
-      </button>
-    </div>
+      <p className="mt-2 text-gray-600">
+        Patient Dashboard Overview
+      </p>
+
+      {/* Dashboard Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+        <div className="bg-white p-4 rounded-xl shadow">
+          Upcoming Appointments
+        </div>
+
+        <div className="bg-white p-4 rounded-xl shadow">
+          Medical Records
+        </div>
+
+        <div className="bg-white p-4 rounded-xl shadow">
+          Notifications
+        </div>
+
+      </div>
+
+    </DashboardLayout>
   );
 }
 

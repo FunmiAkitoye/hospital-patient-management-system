@@ -30,5 +30,7 @@ app.listen(PORT, () => {
 });
 
 const userRoutes = require("./routes/userRoutes");
-
 app.use("/api/users", userRoutes);
+
+const doctorRoutes = require("./routes/doctorRoutes");
+app.use("/api/doctors", doctorRoutes);

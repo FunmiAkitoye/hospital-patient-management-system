@@ -47,7 +47,7 @@ function Register() {
       <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100">
     
     
-      <h1 className="text-4xl font-bold text-center mb-2 text-gray-800">Register</h1>
+      <h1 className="text-4xl font-bold text-center mb-2 text-gray-800">Create Account</h1>
        <p className="text-center text-gray-500 mb-8">
           Join the Hospital Care System
         </p>
