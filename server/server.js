@@ -1,5 +1,6 @@
+const appointmentRoutes = require("./routes/appointmentRoutes");
 const dns = require("dns");
-dns.setServers(["8.8.8.8", "8.8.4.4"]); // Forces Google DNS to resolve MongoDB SRV records
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require("express");
 const cors = require("cors");
@@ -14,6 +15,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/appointments", appointmentRoutes);
 
 const authRoutes = require("./routes/authRoutes");
 

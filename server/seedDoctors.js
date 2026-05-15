@@ -1,40 +1,61 @@
-const dns = require("dns");
-dns.setServers(["8.8.8.8", "8.8.4.4"]); // Forces Node to bypass local ISP DNS limits
-
 require("dotenv").config();
-const mongoose = require("mongoose");
+const connectDB = require("./config/db");
 const Doctor = require("./models/Doctor");
-const connectDB = require("./config/db")
-
-mongoose.connect(process.env.MONGO_URI);
 
 const seedDoctors = async () => {
-  await Doctor.deleteMany();
-  await connectDB();
-  await Doctor.insertMany([
-    {
-      name: "Dr. John Smith",
-      specialization: "Cardiologist",
-      experience: 10,
-      availability: "Available",
-    },
-    {
-      name: "Dr. Sarah Johnson",
-      specialization: "Dermatologist",
-      experience: 7,
-      availability: "Busy",
-    },
-    {
-      name: "Dr. Michael Lee",
-      specialization: "Neurologist",
-      experience: 12,
-      availability: "Available",
-    },
-  ]);
+  try {
+    await connectDB();
 
-  console.log("Doctors added");
+    await Doctor.deleteMany();
 
-  process.exit();
+    await Doctor.insertMany([
+      {
+        name: "Dr. John Smith",
+        email: "john.smith@hospital.com",
+        specialty: "Cardiologist",
+        phone: "08012345678",
+        isAvailable: true,
+        availability: [
+          {
+            day: "Monday",
+            timeSlots: ["10:00", "14:00"],
+          },
+        ],
+      },
+      {
+        name: "Dr. Sarah Johnson",
+        email: "sarah.johnson@hospital.com",
+        specialty: "Dermatologist",
+        phone: "08023456789",
+        isAvailable: false,
+        availability: [
+          {
+            day: "Wednesday",
+            timeSlots: ["12:00", "16:00"],
+          },
+        ],
+      },
+      {
+        name: "Dr. Michael Lee",
+        email: "michael.lee@hospital.com",
+        specialty: "Neurologist",
+        phone: "08034567890",
+        isAvailable: true,
+        availability: [
+          {
+            day: "Friday",
+            timeSlots: ["09:00", "13:00"],
+          },
+        ],
+      },
+    ]);
+
+    console.log("Doctors seeded successfully");
+    process.exit();
+  } catch (error) {
+    console.error("Seeding failed:", error);
+    process.exit(1);
+  }
 };
 
 seedDoctors();

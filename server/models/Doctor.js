@@ -7,9 +7,19 @@ const doctorSchema = new mongoose.Schema(
       required: true,
     },
 
-    specialization: {
+    specialty: {
       type: String,
       required: true,
+    },
+
+     phone: {
+      type: String,
+    },
+
+     email: {
+      type: String,
+      required: true,
+      unique: true,
     },
 
     experience: {
@@ -17,15 +27,19 @@ const doctorSchema = new mongoose.Schema(
       required: true,
     },
 
-    availability: {
-      type: String,
-      default: "Available",
+    availability: [
+     {
+       day: String,
+        timeSlots: [String],
     },
+  ],
 
-    contact: {
-      type: String,
+      isAvailable: {
+        type: Boolean,
+        default: true,
+      },
     },
-  },
+   
   {
     timestamps: true,
   }
