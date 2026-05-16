@@ -12,4 +12,5 @@ router.post("/", protect, bookAppointment);
 router.get("/", protect, getAppointments);
 router.delete("/:id", protect, deleteAppointment);
 
+
 module.exports = router;

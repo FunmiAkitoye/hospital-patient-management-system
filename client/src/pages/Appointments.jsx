@@ -1,213 +1,154 @@
 import { useEffect, useState } from "react";
+
 import axios from "axios";
+
+import DashboardLayout from "../layouts/DashboardLayout";
 
 function Appointments() {
 
-  const token = localStorage.getItem("token");
-  
-  const [formData, setFormData] = useState({
-    patientName: "",
-    doctorName: "",
-    appointmentDate: "",
-    appointmentTime: "",
-    reason: "",
-  });
+  const [appointments, setAppointments] =
+    useState([]);
 
-  const [appointments, setAppointments] = useState([]);
+  const userInfo = JSON.parse(
+    localStorage.getItem("userInfo")
+  );
 
-
-  // FETCH APPOINTMENTS
   const fetchAppointments = async () => {
     try {
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
       const response = await axios.get(
-        "http://localhost:5000/api/appointments"
+        "http://localhost:5000/api/appointments",
+        config
       );
 
       setAppointments(response.data);
 
     } catch (error) {
+
       console.error(error);
+
     }
   };
-
 
   useEffect(() => {
     fetchAppointments();
   }, []);
 
 
-  // HANDLE INPUT CHANGES
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-
-  // CREATE APPOINTMENT
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-
-      await axios.post(
-        "http://localhost:5000/api/appointments",
-        formData
-      );
-
-      alert("Appointment booked successfully");
-
-      setFormData({
-        patientName: "",
-        doctorName: "",
-        appointmentDate: "",
-        appointmentTime: "",
-        reason: "",
-      });
-
-      fetchAppointments();
-
-    } catch (error) {
-      console.error(error);
-
-      alert("Booking failed");
-    }
-  };
-
-
   // DELETE APPOINTMENT
   const deleteAppointment = async (id) => {
     try {
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
       await axios.delete(
-        `http://localhost:5000/api/appointments/${id}`
+        `http://localhost:5000/api/appointments/${id}`,
+        config
       );
 
       fetchAppointments();
 
     } catch (error) {
+
       console.error(error);
+
     }
   };
 
-
   return (
-    <div style={{ padding: "30px" }}>
+    <DashboardLayout>
 
-      <h1>Hospital Appointment System</h1>
+      <div className="p-6">
 
-      {/* BOOKING FORM */}
-      <form onSubmit={handleSubmit}>
+        <h1 className="text-3xl font-bold mb-6">
+          My Appointments
+        </h1>
 
-        <input
-          type="text"
-          name="patientName"
-          placeholder="Patient Name"
-          value={formData.patientName}
-          onChange={handleChange}
-        />
+        <div className="space-y-5">
 
-        <br /><br />
+          {appointments.map((appointment) => (
 
-        <input
-          type="text"
-          name="doctorName"
-          placeholder="Doctor Name"
-          value={formData.doctorName}
-          onChange={handleChange}
-        />
+            <div
+              key={appointment._id}
+              className="bg-white shadow-md rounded-2xl p-5 border"
+            >
 
-        <br /><br />
+              <h2 className="text-2xl font-bold">
+                {
+                  appointment.clinic?.name
+                }
+              </h2>
 
-        <input
-          type="date"
-          name="appointmentDate"
-          value={formData.appointmentDate}
-          onChange={handleChange}
-        />
+              <p className="text-gray-600 mt-2">
+                {
+                  appointment.reason
+                }
+              </p>
 
-        <br /><br />
+              <div className="mt-4 space-y-1">
 
-        <input
-          type="text"
-          name="appointmentTime"
-          placeholder="Appointment Time"
-          value={formData.appointmentTime}
-          onChange={handleChange}
-        />
+                <p>
+                  <span className="font-semibold">
+                    Date:
+                  </span>
+                  {" "}
+                  {new Date(
+                    appointment.date
+                  ).toLocaleDateString()}
+                </p>
 
-        <br /><br />
+                <p>
+                  <span className="font-semibold">
+                    Time:
+                  </span>
+                  {" "}
+                  {appointment.time}
+                </p>
 
-        <textarea
-          name="reason"
-          placeholder="Reason"
-          value={formData.reason}
-          onChange={handleChange}
-        />
+                <p>
+                  <span className="font-semibold">
+                    Status:
+                  </span>
+                  {" "}
+                  <span className="capitalize text-blue-600">
+                    {
+                      appointment.status
+                    }
+                  </span>
+                </p>
 
-        <br /><br />
+              </div>
 
-        <button type="submit">
-          Book Appointment
-        </button>
+              <button
+                onClick={() =>
+                  deleteAppointment(
+                    appointment._id
+                  )
+                }
+                className="mt-5 bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 transition"
+              >
+                Cancel Appointment
+              </button>
 
-      </form>
+            </div>
 
-
-      <hr />
-
-
-      {/* APPOINTMENTS LIST */}
-      <h2>Appointments</h2>
-
-      {appointments.map((appointment) => (
-
-        <div
-          key={appointment._id}
-          style={{
-            border: "1px solid gray",
-            padding: "15px",
-            marginBottom: "15px",
-          }}
-        >
-
-          <h3>{appointment.patientName}</h3>
-
-          <p>
-            Doctor: {appointment.doctorName}
-          </p>
-
-          <p>
-            Date:
-            {" "}
-            {new Date(
-              appointment.appointmentDate
-            ).toLocaleDateString()}
-          </p>
-
-          <p>
-            Time: {appointment.appointmentTime}
-          </p>
-
-          <p>
-            Reason: {appointment.reason}
-          </p>
-
-          <button
-            onClick={() =>
-              deleteAppointment(appointment._id)
-            }
-          >
-            Cancel Appointment
-          </button>
+          ))}
 
         </div>
 
-      ))}
+      </div>
 
-    </div>
+    </DashboardLayout>
   );
 }
 

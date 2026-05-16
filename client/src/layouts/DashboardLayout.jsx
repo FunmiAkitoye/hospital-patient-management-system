@@ -28,8 +28,8 @@ function DashboardLayout({ children }) {
             Appointments
           </Link>
 
-          <Link to="/doctors" className="block hover:text-gray-200">
-            Doctors
+          <Link to="/clinics" className="block hover:text-gray-200">
+            Clinics
           </Link>
 
           <Link to="/profile" className="block hover:text-gray-200">

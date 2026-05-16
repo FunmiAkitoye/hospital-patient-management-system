@@ -18,7 +18,6 @@ app.use(express.json());
 app.use("/api/appointments", appointmentRoutes);
 
 const authRoutes = require("./routes/authRoutes");
-
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
@@ -36,3 +35,9 @@ app.use("/api/users", userRoutes);
 
 const doctorRoutes = require("./routes/doctorRoutes");
 app.use("/api/doctors", doctorRoutes);
+
+const dashboardRoutes = require("./routes/dashboardRoutes");
+app.use("/api/dashboard", dashboardRoutes);
+
+const clinicRoutes = require("./routes/clinicRoutes");
+app.use("/api/clinics", clinicRoutes);
